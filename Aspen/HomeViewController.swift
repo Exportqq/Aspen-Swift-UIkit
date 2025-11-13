@@ -46,14 +46,31 @@ class HomeViewController: UIViewController {
     }()
     
     lazy var cardOneImage: UIImageView = {
-            let imageView = UIImageView()
-            // Убедитесь, что изображение с именем "meimg" добавлено в Assets.xcassets
-            imageView.image = UIImage(named: "tour_one")
-            imageView.contentMode = .scaleAspectFit
-            // Располагаем картинку под заголовком
-            imageView.clipsToBounds = true
-            return imageView
-        }()
+        let imageView = UIImageView()
+        // Убедитесь, что изображение с именем "meimg" добавлено в Assets.xcassets
+        imageView.image = UIImage(named: "tour_one")
+        imageView.contentMode = .scaleAspectFit
+        // Располагаем картинку под заголовком
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    lazy var tourNameBlock: UIView = {
+        let block = UIView()
+        block.backgroundColor = .block
+        block.layer.cornerRadius = 11.5
+        
+        return block
+    }()
+    
+    lazy var tourName: UILabel = {
+        let label = UILabel()
+        label.text = "Alley Palace"
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
+        label.textColor = .white
+        
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +92,12 @@ class HomeViewController: UIViewController {
         
         view.addSubview(cardOneImage)
         cardOneImage.frame = CGRect(x: 20, y: cardsAllTxt.frame.maxY + 30, width: 188, height: 240)
+        
+        view.addSubview(tourNameBlock)
+        tourNameBlock.frame = CGRect(x: 34, y: cardOneImage.frame.minY + 187, width: 99, height: 23)
+        
+        view.addSubview(tourName)
+        tourName.frame = CGRect(x: tourNameBlock.frame.minX + 12, y: tourNameBlock.frame.minY + 4, width: 75, height: 15)
     }
     
 

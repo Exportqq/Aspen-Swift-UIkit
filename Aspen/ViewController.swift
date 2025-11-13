@@ -40,7 +40,8 @@ class ViewController: UIViewController {
     
     lazy var mainButton: GradientButton = {
         let button = GradientButton(title: "Explore")
-        
+        // Добавляем действие: self = этот экран, selector = имя функции, touchUpInside = нажатие и отпускание пальца
+            button.addTarget(self, action: #selector(didTapExploreButton), for: .touchUpInside)
         return button
     }()
     
@@ -67,6 +68,8 @@ class ViewController: UIViewController {
         view.addSubview(backgroundImageView)
         view.sendSubviewToBack(backgroundImageView)
     }
+    
+    
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -86,5 +89,15 @@ class ViewController: UIViewController {
             width: view.frame.width - 64,
             height: buttonHeight
         )
+    }
+    
+    @objc func didTapExploreButton() {
+        let nextVC = HomeViewController()
+        
+        // Опционально: чтобы открылось на весь экран
+        nextVC.modalPresentationStyle = .fullScreen
+        
+        // Используем present вместо push
+        self.present(nextVC, animated: true, completion: nil)
     }
 }
