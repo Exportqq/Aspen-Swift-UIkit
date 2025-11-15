@@ -55,6 +55,16 @@ class HomeViewController: UIViewController {
         return imageView
     }()
     
+    lazy var cardTwoImage: UIImageView = {
+        let imageView = UIImageView()
+        // Убедитесь, что изображение с именем "meimg" добавлено в Assets.xcassets
+        imageView.image = UIImage(named: "tour_one")
+        imageView.contentMode = .scaleAspectFit
+        // Располагаем картинку под заголовком
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     lazy var tourNameBlock: UIView = {
         let block = UIView()
         block.backgroundColor = .block
@@ -66,6 +76,32 @@ class HomeViewController: UIViewController {
     lazy var tourName: UILabel = {
         let label = UILabel()
         label.text = "Alley Palace"
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
+        label.textColor = .white
+        
+        return label
+    }()
+    
+    lazy var raitingBlock: UIView = {
+        let block = UIView()
+        block.backgroundColor = .block
+        block.layer.cornerRadius = 11.5
+        
+        return block
+    }()
+    
+    lazy var raitingImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "raiting")
+        image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
+        
+        return image
+    }()
+    
+    lazy var raitingTxt: UILabel = {
+        let label = UILabel()
+        label.text = "4.1"
         label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
         label.textColor = .white
         
@@ -91,13 +127,26 @@ class HomeViewController: UIViewController {
         cardsAllTxt.frame.origin = CGPoint(x: 318,y: homeTxt.frame.maxY + 40)
         
         view.addSubview(cardOneImage)
-        cardOneImage.frame = CGRect(x: 20, y: cardsAllTxt.frame.maxY + 30, width: 188, height: 240)
+        cardOneImage.frame = CGRect(x: 20, y: cardsAllTxt.frame.maxY + 12, width: 188, height: 240)
+        
+        view.addSubview(cardTwoImage)
+        cardTwoImage.frame = CGRect(x: cardOneImage.frame.maxX + 25, y: cardsAllTxt.frame.maxY + 12, width: 188, height: 240)
         
         view.addSubview(tourNameBlock)
-        tourNameBlock.frame = CGRect(x: 34, y: cardOneImage.frame.minY + 187, width: 99, height: 23)
+        tourNameBlock.frame = CGRect(x: 34, y: cardOneImage.frame.minY + 175, width: 99, height: 23)
         
         view.addSubview(tourName)
         tourName.frame = CGRect(x: tourNameBlock.frame.minX + 12, y: tourNameBlock.frame.minY + 4, width: 75, height: 15)
+        
+        view.addSubview(raitingBlock)
+        raitingBlock.frame = CGRect(x: 34, y: tourNameBlock.frame.maxY + 6, width: 52, height: 24)
+        
+        view.addSubview(raitingImage)
+        raitingImage.frame = CGRect(x: raitingBlock.frame.minX + 12, y: raitingBlock.frame.minY + 6, width: 12, height: 12)
+        
+        view.addSubview(raitingTxt)
+        raitingTxt.sizeToFit()
+        raitingTxt.frame.origin = CGPoint(x: raitingImage.frame.maxX + 4, y: raitingBlock.frame.minY + 4)
     }
     
 
