@@ -65,6 +65,16 @@ class HomeViewController: UIViewController {
         return imageView
     }()
     
+    lazy var cardThreeImage: UIImageView = {
+        let imageView = UIImageView()
+        // Убедитесь, что изображение с именем "meimg" добавлено в Assets.xcassets
+        imageView.image = UIImage(named: "tour_one")
+        imageView.contentMode = .scaleAspectFit
+        // Располагаем картинку под заголовком
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     lazy var tourNameBlock: UIView = {
         let block = UIView()
         block.backgroundColor = .block
@@ -108,11 +118,19 @@ class HomeViewController: UIViewController {
         return label
     }()
 
+    lazy var popularScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        // Отключаем вертикальные индикаторы прокрутки, оставляем только горизонтальные
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false // Можно поставить false, чтобы скрыть полосу прокрутки
+        return scrollView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .white
         
+        // --- Эти элементы остаются на главном view и НЕ скроллятся ---
         view.addSubview(homeTitle)
         homeTitle.frame = CGRect(x: 20, y: 64, width: 53, height: 17)
 
@@ -124,29 +142,53 @@ class HomeViewController: UIViewController {
         
         view.addSubview(cardsAllTxt)
         cardsAllTxt.sizeToFit()
-        cardsAllTxt.frame.origin = CGPoint(x: 318,y: homeTxt.frame.maxY + 40)
+        // Используем view.frame.width для надежного позиционирования у правого края
+        cardsAllTxt.frame.origin = CGPoint(x: view.frame.width - cardsAllTxt.frame.width - 20, y: homeTxt.frame.maxY + 40)
         
-        view.addSubview(cardOneImage)
-        cardOneImage.frame = CGRect(x: 20, y: cardsAllTxt.frame.maxY + 12, width: 188, height: 240)
         
-        view.addSubview(cardTwoImage)
-        cardTwoImage.frame = CGRect(x: cardOneImage.frame.maxX + 25, y: cardsAllTxt.frame.maxY + 12, width: 188, height: 240)
+        // --- 1. НАСТРАИВАЕМ SCROLL VIEW ---
+        view.addSubview(popularScrollView)
+        popularScrollView.frame = CGRect(x: 0, y: cardsAllTxt.frame.maxY + 12, width: view.frame.width, height: 240)
         
-        view.addSubview(tourNameBlock)
-        tourNameBlock.frame = CGRect(x: 34, y: cardOneImage.frame.minY + 175, width: 99, height: 23)
         
-        view.addSubview(tourName)
+        // --- 2. ДОБАВЛЯЕМ ВСЕ СКРОЛЛЯЩИЕСЯ ЭЛЕМЕНТЫ ВНУТРЬ `popularScrollView` ---
+        
+        // Добавляем первую карточку
+        popularScrollView.addSubview(cardOneImage)
+        // ВАЖНО: Координаты теперь относительны `popularScrollView`, поэтому y = 0
+        cardOneImage.frame = CGRect(x: 20, y: 0, width: 188, height: 240)
+        
+        // Добавляем вторую карточку
+        popularScrollView.addSubview(cardTwoImage)
+        // Ее `x` зависит от первой карточки, а `y` тоже равен 0
+        cardTwoImage.frame = CGRect(x: cardOneImage.frame.maxX + 25, y: 0, width: 188, height: 240)
+        
+        popularScrollView.addSubview(cardThreeImage)
+        cardThreeImage.frame = CGRect(x: cardTwoImage.frame.maxX + 25, y: 0, width: 188, height: 240)
+        
+        // Все элементы на карточке тоже должны быть ВНУТРИ `popularScrollView`
+        // Их координаты тоже считаются относительно `popularScrollView`
+        
+        popularScrollView.addSubview(tourNameBlock)
+        tourNameBlock.frame = CGRect(x: cardOneImage.frame.minX + 14, y: 175, width: 99, height: 23)
+        
+        popularScrollView.addSubview(tourName)
         tourName.frame = CGRect(x: tourNameBlock.frame.minX + 12, y: tourNameBlock.frame.minY + 4, width: 75, height: 15)
         
-        view.addSubview(raitingBlock)
-        raitingBlock.frame = CGRect(x: 34, y: tourNameBlock.frame.maxY + 6, width: 52, height: 24)
+        popularScrollView.addSubview(raitingBlock)
+        raitingBlock.frame = CGRect(x: cardOneImage.frame.minX + 14, y: tourNameBlock.frame.maxY + 6, width: 52, height: 24)
         
-        view.addSubview(raitingImage)
+        popularScrollView.addSubview(raitingImage)
         raitingImage.frame = CGRect(x: raitingBlock.frame.minX + 12, y: raitingBlock.frame.minY + 6, width: 12, height: 12)
         
-        view.addSubview(raitingTxt)
+        popularScrollView.addSubview(raitingTxt)
         raitingTxt.sizeToFit()
         raitingTxt.frame.origin = CGPoint(x: raitingImage.frame.maxX + 4, y: raitingBlock.frame.minY + 4)
+        
+        
+        // --- 3. УКАЗЫВАЕМ РАЗМЕР КОНТЕНТА (САМЫЙ ВАЖНЫЙ ШАГ!) ---
+        let contentWidth = cardThreeImage.frame.maxX + 20 // +20 для отступа справа
+        popularScrollView.contentSize = CGSize(width: contentWidth, height: popularScrollView.frame.height)
     }
     
 
